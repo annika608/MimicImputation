@@ -79,7 +79,6 @@ class KNNImpute(BaseEstimator, TransformerMixin):
 
 #filter for bp
 # bp = df[df.ITEMID.eq(220045)]
-# print("ABOVE",bp.shape)
 
 # bp=bp.select_dtypes(include=['float64'])
 # print(bp.shape)

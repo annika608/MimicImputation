@@ -47,9 +47,11 @@ def load_label(file = filename, rows = 10000):
 
     labels = {
     220045: "HR",
+    211: "HR",
     220050: "ABP_s",
     220051: "ABP_d",
     223761: "TEMP_f",
+    678: "TEMP_f",
     }
     #224166: "BP" // no vals?
 

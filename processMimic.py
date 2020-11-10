@@ -2,7 +2,7 @@ import csv
 import pandas as pd
 import numpy as np
 from sklearn.impute import KNNImputer
-
+import re
 filename = "mimic-data/chartevents_filtered.csv"
 
 
@@ -11,6 +11,26 @@ def filter_items(row, indicator):
         return row["VALUENUM"]
     else:
         return np.NaN
+
+def parse_date(date):
+    try:
+        return int(''.join(re.split("[-:/ ]", date)))
+    except TypeError:
+        # handle blank vals for DOD
+        return date
+
+def get_age(row):
+    try:
+        curr = parse_date(row["CHARTTIME"])
+        dob = parse_date(row["DOB"])
+        #convert to yrs?
+        return curr - dob
+
+    except:
+        dob = parse_date(row["DOB"])
+        dod = parse_date(row["DOD"])
+        #print(dod, dob)
+        return dod - dob
 
 def load_label(file = filename, rows = 10000):
 
@@ -21,7 +41,9 @@ def load_label(file = filename, rows = 10000):
 
     df['FEMALE'] = df['GENDER'] == 'F'
     df['FEMALE'] = df["FEMALE"].astype(int)
-    #df["AGE"] = df["DOB"] - df["DOD"] #TODO: ParseDates
+    
+    df["AGE"] = df.apply(lambda row: get_age(row), axis=1)
+
 
     labels = {
     220045: "HR",
